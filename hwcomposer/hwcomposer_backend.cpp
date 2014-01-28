@@ -87,34 +87,7 @@ HwComposerBackend::create()
     fprintf(stderr, "== hwcomposer device ==\n");
 
     // Determine which backend we use based on the supported module API version
-    switch (hwc_device->version) {
-        case HWC_DEVICE_API_VERSION_0_1:
-        case HWC_DEVICE_API_VERSION_0_2:
-        case HWC_DEVICE_API_VERSION_0_3:
             return new HwComposerBackend_v0(hwc_module, hwc_device);
-            break;
-#ifdef HWC_DEVICE_API_VERSION_1_0
-        case HWC_DEVICE_API_VERSION_1_0:
-            return new HwComposerBackend_v10(hwc_module, hwc_device);
-            break;
-#endif /* HWC_DEVICE_API_VERSION_1_0 */
-#ifdef HWC_PLUGIN_HAVE_HWCOMPOSER1_API
-        case HWC_DEVICE_API_VERSION_1_1:
-#ifdef HWC_DEVICE_API_VERSION_1_2
-        case HWC_DEVICE_API_VERSION_1_2:
-#endif /* HWC_DEVICE_API_VERSION_1_2 */
-#ifdef HWC_DEVICE_API_VERSION_1_3
-        case HWC_DEVICE_API_VERSION_1_3:
-#endif /* HWC_DEVICE_API_VERSION_1_3 */
-            return new HwComposerBackend_v11(hwc_module, hwc_device);
-            break;
-#endif /* HWC_PLUGIN_HAVE_HWCOMPOSER1_API */
-        default:
-            fprintf(stderr, "Unknown hwcomposer API: 0x%x\n",
-                    hwc_module->module_api_version);
-            return NULL;
-            break;
-    }
 }
 
 void
