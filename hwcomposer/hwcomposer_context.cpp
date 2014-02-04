@@ -171,8 +171,6 @@ void HwComposerContext::swapToWindow(QEglFSContext *context, QPlatformSurface *s
 
     EGLDisplay egl_display = context->eglDisplay();
     EGLSurface egl_surface = context->eglSurfaceForPlatformSurface(surface);
-    if (backend->shouldSwapBuffers())
-         QEGLPlatformContext::swapBuffers(surface);
     return backend->swap(egl_display, egl_surface);
 }
 

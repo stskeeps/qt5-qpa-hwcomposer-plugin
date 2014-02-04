@@ -77,7 +77,7 @@ public:
     void destroyNativeWindow(EGLNativeWindowType window);
 
     void swapToWindow(QEglFSContext *context, QPlatformSurface *surface);
-
+    bool shouldSwapBuffers();
     void sleepDisplay(bool sleep);
     qreal refreshRate() const;
 
