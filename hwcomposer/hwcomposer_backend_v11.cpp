@@ -148,6 +148,11 @@ HwComposerBackend_v11::destroyWindow(EGLNativeWindowType window)
     // FIXME: Implement (delete hwc_win + set it to NULL?)
 }
 
+bool HwComposerBackend_v11::shouldSwapBuffers()
+{
+     return true;
+}
+
 void
 HwComposerBackend_v11::swap(EGLNativeDisplayType display, EGLSurface surface)
 {

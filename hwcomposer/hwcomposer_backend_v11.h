@@ -60,7 +60,7 @@ public:
     virtual void swap(EGLNativeDisplayType display, EGLSurface surface);
     virtual void sleepDisplay(bool sleep);
     virtual float refreshRate();
-
+    virtual bool shouldSwapBuffers();
 private:
     hwc_composer_device_1_t *hwc_device;
     HWComposerNativeWindow *hwc_win;
