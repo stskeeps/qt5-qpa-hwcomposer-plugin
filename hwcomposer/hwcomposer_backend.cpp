@@ -60,7 +60,7 @@ HwComposerBackend::create()
 {
     hw_module_t *hwc_module = NULL;
     hw_device_t *hwc_device = NULL;
-
+    int num_displays =  HWC_NUM_DISPLAY_TYPES;
     // Some implementations insist on having the framebuffer module opened before loading
     // the hardware composer one. Therefor we rely on using the fbdev HYBRIS_EGLPLATFORM
     // here and use eglGetDisplay to initialize it.
@@ -83,8 +83,9 @@ HwComposerBackend::create()
 
     uint32_t version = hwc_device->version;
     if ((version & 0xffff0000) == 0) {
-        // legacy version encoding
-        version <<= 16;
+	    // legacy version encoding
+	    version <<= 16;
+	    version += 1;
     }
 
     fprintf(stderr, "== hwcomposer device ==\n");
@@ -106,14 +107,21 @@ HwComposerBackend::create()
 #endif /* HWC_DEVICE_API_VERSION_1_0 */
 #ifdef HWC_PLUGIN_HAVE_HWCOMPOSER1_API
         case HWC_DEVICE_API_VERSION_1_1:
+            return new HwComposerBackend_v11(hwc_module, hwc_device,  num_displays);
+            break;
 #ifdef HWC_DEVICE_API_VERSION_1_2
         case HWC_DEVICE_API_VERSION_1_2:
+	    /* 1.2 and beyond has virtual displays */
+            num_displays = HWC_NUM_DISPLAY_TYPES + 1;
+            return new HwComposerBackend_v11(hwc_module, hwc_device,  num_displays);
+            break;
 #endif /* HWC_DEVICE_API_VERSION_1_2 */
 #ifdef HWC_DEVICE_API_VERSION_1_3
         case HWC_DEVICE_API_VERSION_1_3:
-#endif /* HWC_DEVICE_API_VERSION_1_3 */
-            return new HwComposerBackend_v11(hwc_module, hwc_device);
+            num_displays = HWC_NUM_DISPLAY_TYPES + 1;
+            return new HwComposerBackend_v11(hwc_module, hwc_device,  num_displays);
             break;
+#endif /* HWC_DEVICE_API_VERSION_1_3 */
 #endif /* HWC_PLUGIN_HAVE_HWCOMPOSER1_API */
         default:
             fprintf(stderr, "Unknown hwcomposer API: 0x%x/0x%x/0x%x\n",
